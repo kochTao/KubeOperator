@@ -43,14 +43,11 @@ class ClusterViewSet(viewsets.ModelViewSet):
 class PackageViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.all()
     serializer_class = serializers.PackageSerializer
-    permission_classes = (IsSuperUser,)
-    http_method_names = ['get', 'head', 'options']
     lookup_field = 'name'
     lookup_url_kwarg = 'name'
 
-    def get_queryset(self):
-        Package.lookup()
-        return super().get_queryset()
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
 
 class AuthViewSet(viewsets.ModelViewSet):
@@ -226,9 +223,10 @@ class BackupStorageViewSet(viewsets.ModelViewSet):
     lookup_field = 'name'
     lookup_url_kwarg = 'name'
 
+
 class CheckStorageView(APIView):
 
-    def post(self,request, **kwargs):
+    def post(self, request, **kwargs):
         client = StorageClient(request.data)
         valid = client.check_valid()
         response = HttpResponse()
@@ -244,9 +242,10 @@ class CheckStorageView(APIView):
             response.write(json.dumps(result))
         return response
 
+
 class GetBucketsView(APIView):
 
-    def post(self,request):
+    def post(self, request):
         client = StorageClient(request.data)
         buckets = client.list_buckets()
         response = HttpResponse()
@@ -258,12 +257,14 @@ class GetBucketsView(APIView):
         response.write(json.dumps(result))
         return response
 
+
 class BackupStrategyViewSet(viewsets.ModelViewSet):
     queryset = BackupStrategy.objects.all()
     serializer_class = serializers.BackupStrategySerializer
     permission_classes = (IsSuperUser,)
     lookup_field = 'project_id'
     lookup_url_kwarg = 'project_id'
+
 
 class ClusterBackupViewSet(viewsets.ModelViewSet):
     queryset = ClusterBackup.objects.all()
@@ -301,6 +302,7 @@ class ClusterBackupDelete(generics.DestroyAPIView):
             response.write(json.dumps(result))
         return response
 
+
 class ClusterBackupRestore(generics.UpdateAPIView):
     serializer_class = serializers.ClusterBackupSerializer
     permission_classes = (IsSuperUser,)
@@ -319,4 +321,3 @@ class ClusterBackupRestore(generics.UpdateAPIView):
             result['success'] = False
             response.write(json.dumps(result))
         return response
-

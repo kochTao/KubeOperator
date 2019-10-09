@@ -15,6 +15,12 @@ from kubeops_api.models.package import Package
 from .signals import pre_deploy_execution_start, post_deploy_execution_start
 
 
+@receiver(post_save, sender=Package)
+def on_package_save(sender, instance=None, created=False, **kwargs):
+    if instance:
+        instance.on_package_save()
+
+
 @receiver(post_save, sender=Cluster)
 def on_cluster_save(sender, instance=None, created=True, **kwargs):
     if created and instance and instance.template:
@@ -48,13 +54,6 @@ def post_host_save(sender, instance=None, created=False, **kwargs):
         instance.gather_info()
 
 
-def auto_lookup_packages():
-    try:
-        Package.lookup()
-    except:
-        pass
-
-
 @receiver(pre_deploy_execution_start)
 def on_execution_start(sender, execution, **kwargs):
     execution.date_start = timezone.now()
@@ -81,4 +80,3 @@ def on_execution_end(sender, execution, result, ignore_errors, **kwargs):
     execution.save()
 
 
-auto_lookup_packages()
