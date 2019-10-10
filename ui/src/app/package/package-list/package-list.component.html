@@ -10,6 +10,7 @@
   <clr-dg-column>kubernetes版本</clr-dg-column>
   <clr-dg-column>etcd版本</clr-dg-column>
   <clr-dg-column>docker版本</clr-dg-column>
+  <clr-dg-column>状态</clr-dg-column>
   <clr-dg-column>创建时间</clr-dg-column>
   <clr-dg-row *ngFor="let package of packages" [clrDgItem]="package">
     <clr-dg-cell style="cursor: pointer; color: #0079b8"><a
@@ -18,6 +19,7 @@
     <clr-dg-cell>{{package.meta.components.kubernetes}}</clr-dg-cell>
     <clr-dg-cell>{{package.meta.components.etcd}}</clr-dg-cell>
     <clr-dg-cell>{{package.meta.components.docker}}</clr-dg-cell>
+    <clr-dg-cell>{{package.status}}</clr-dg-cell>
     <clr-dg-cell>{{package.date_created| date: 'yyyy-MM-dd HH:mm:ss'}}</clr-dg-cell>
   </clr-dg-row>
 

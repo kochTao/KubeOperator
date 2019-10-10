@@ -29,10 +29,10 @@ class Package(models.Model):
     status = models.CharField(max_length=128, null=True, default=PACKAGE_STATUS_UNKNOWN, choices=PACKAGE_STATUS_CHOICES)
 
     def health_check(self):
-        Logger.de
         result = False
         try:
-            req = requests.get(self.endpoint)
+            print(self.endpoint + "/api/health")
+            req = requests.get("http://127.0.0.1:5000/api/health")
             if req.ok:
                 result = True
         except Exception as e:
@@ -44,7 +44,8 @@ class Package(models.Model):
             self.status = Package.PACKAGE_STATUS_INVALID
 
     def on_package_save(self):
-        self.health_check()
+        pass
+        # self.health_check()
 
 
 class Meta:

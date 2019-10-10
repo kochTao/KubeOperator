@@ -6,6 +6,7 @@ export class Package {
   meta: PackageMeta;
   date_created: string;
   vars: {};
+  status: string;
 }
 
 export class Network {
